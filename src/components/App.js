@@ -53,15 +53,16 @@ class App extends Component {
   }
 
   filterPost() {
-    let str = encodeURI(this.state.userInput.slice());
-    axios.get(`${BASE_URL}/posts?text=${ str }`).then(res => {
-      console.log("res: ", res);
-      this.setState({posts: res.data, userInput: ""});
+    let str = encodeURI(this.state.userInput.slice().toLowerCase());
+    axios.get(`${BASE_URL}/posts?`, str).then(res => {
+      console.log("res: ", res.data);
+      let filter = res.data.filter(post => post.text.includes(str))
+      this.setState({posts: filter});
     }).catch(err => console.log(err))
   }
 
   handleChange(e) {
-    this.setState({userInput: e.target.value})
+    this.setState({userInput: e.target.value});
   }
 
   render() {
