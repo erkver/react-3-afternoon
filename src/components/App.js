@@ -13,13 +13,15 @@ class App extends Component {
     super();
 
     this.state = {
-      posts: []
+      posts: [],
+      userInput: ""
     };
 
     this.updatePost = this.updatePost.bind( this );
     this.deletePost = this.deletePost.bind( this );
     this.createPost = this.createPost.bind( this );
     this.filterPost = this.filterPost.bind( this );
+    this.handleChange = this.handleChange.bind( this );
   }
   
   componentDidMount() {
@@ -51,11 +53,15 @@ class App extends Component {
   }
 
   filterPost() {
-    let str = this.str.value;
-    axios.get(BASE_URL + '/posts', {str}).then(res => {
+    let str = encodeURI(this.state.userInput.slice());
+    axios.get(`${BASE_URL}/posts?text=${ str }`).then(res => {
       console.log("res: ", res);
-      this.setState({posts: res.data});
+      this.setState({posts: res.data, userInput: ""});
     }).catch(err => console.log(err))
+  }
+
+  handleChange(e) {
+    this.setState({userInput: e.target.value})
   }
 
   render() {
@@ -64,8 +70,9 @@ class App extends Component {
     return (
       <div className="App__parent">
         <Header 
-          filterPostFn={this.filterPost}
-          ref={str => this.str = str}
+          filterPost={this.filterPost}
+          input={this.state.userInput}
+          handleChange={this.handleChange}
         />
 
         <section className="App__content">

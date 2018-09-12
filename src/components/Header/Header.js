@@ -23,7 +23,9 @@ export default class Header extends Component {
           {/* Displays the search bar */}
           <div className="Header__right">
             <Search 
-              filterPostFn={this.props.filterPostFn}
+              filterPost={this.props.filterPost}
+              userInput={this.props.input}
+              handleChange={this.props.handleChange}
             />
 
             {/* Displays the profile icon */}
